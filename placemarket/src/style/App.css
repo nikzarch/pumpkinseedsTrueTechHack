@@ -1,0 +1,11 @@
+.app-header {
+    background-color: #064e3b;
+    color: white;
+    padding: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  .product-grid-container {
+    padding: 1rem;
+  }
+  

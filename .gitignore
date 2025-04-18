@@ -1,0 +1,8 @@
+placemarket/node_modules/
+placemarket/dist/
+placemarket/.vite/
+placemarket/.env
+placemarket/.env.*.local
+placemarket/*.log
+placemarket/.cache/
+
