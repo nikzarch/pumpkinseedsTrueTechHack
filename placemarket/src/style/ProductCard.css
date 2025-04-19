@@ -23,4 +23,25 @@
     border-radius: 0.5rem;
     cursor: pointer;
   }
+  .question-form {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .question-form input,
+  .question-form textarea {
+    padding: 6px;
+    font-size: 14px;
+  }
+  
+  .question-button {
+    margin-top: 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #aaa;
+    padding: 6px;
+    cursor: pointer;
+  }
+  
   
