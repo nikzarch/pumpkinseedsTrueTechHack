@@ -14,20 +14,40 @@ export default function App() {
       .then((result) => result.json())
       .then((data) => {
         console.log("полученные данные:", data);
-        setProducts(data.data.records); 
+        setProducts(data.data.records);
       })
       .catch((err) =>
         console.error("Ошибка загрузки доступных товаров", err)
       );
   }, []);
-  
+
   return (
     <div className="app-container">
-      <header className="app-header">Плейсмаркет Дикая Черешня</header>
+      <header className="app-header">
+        Плейсмаркет Дикая Черешня
+        
+        <a
+          href="https://true.tabs.sale/share/shrEFLtBBctPzPPwnaLzx"
+          className="feedback-button"
+          style={{
+            backgroundColor: '#fff',
+            color: '#064e3b',
+            padding: '6px 12px',
+            borderRadius: '6px',
+            fontWeight: 'bold',
+            textDecoration: 'none',
+            border: '2px solid #fff',
+            marginLeft: 'auto'
+          }}
+        >
+          Оставить обратную связь
+        </a>
+      </header>
+
       <main className="product-grid-container">
-        <ProductGrid products={products}/>
+        <ProductGrid products={products} />
       </main>
-      <Cart/>
+      <Cart />
     </div>
   )
 
