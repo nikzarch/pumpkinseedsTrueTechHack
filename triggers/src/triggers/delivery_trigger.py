@@ -1,6 +1,6 @@
 import requests
 import time
-from util.generic_api_usage import get,update,delete_records,create_fields
+from util.generic_api_usage import get_data,update,delete_records,create_fields
 
 def parse_quantity(quantity_str):
     if isinstance(quantity_str, str):
@@ -93,14 +93,14 @@ def process_records(data, api_key, stocks_data, stocks_url, archive_url, deliver
                 if update(stocks_url, api_key, stock_info['record_id'], update_fields):
                     print(f"Обновлён остаток для SKU {sku} на складе {warehouse}: {stock_info['current_stock']} → {new_stock}")
             else:
-                create_fields = {
+                create_field = {
                     "SKU": [sku],
                     "Склад": [warehouse],
                     "Остаток": quantity,
                     "Дата подсчёта": int(time.time() * 1000)
                 }
                 
-                if create_fields(stocks_url, api_key, create_fields):
+                if create_fields(stocks_url, api_key, create_field):
                     print(f"Создан новый остаток для SKU {sku} на складе {warehouse}: {quantity}")
     
     ids = archive(archive_url, api_key, cancelled+delivered)
@@ -120,9 +120,9 @@ def process_records(data, api_key, stocks_data, stocks_url, archive_url, deliver
 
 def delivery_request(api_key, archive_url, delivery_url, stocks_url):
     try:
-        data = get(delivery_url, api_key)
+        data = get_data(delivery_url, api_key)
         
-        stocks_data = get(stocks_url, api_key)
+        stocks_data = get_data(stocks_url, api_key)
         if stocks_data is None:
             return
             

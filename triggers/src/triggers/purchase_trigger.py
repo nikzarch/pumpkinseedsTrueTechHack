@@ -1,5 +1,5 @@
 import requests
-from util.generic_api_usage import get,update,delete_records,create_fields
+from util.generic_api_usage import get_data,update,delete_records,create_fields
 
 def parse_quantity(quantity_str):
     if isinstance(quantity_str, str):
@@ -21,18 +21,24 @@ def archive(archive_url, api_key, records):
         print(f"Ошибка при архивации записей: {e}")
         return []
 
-def process_records(data, api_key, archive_url, purchase_url, delivery_url):
+def process_records(data, api_key, archive_url, purchase_url, delivery_url, finance_url):
     on_the_way = []
     cancelled = []
+    created = []
+
+    finance_data = get_data(finance_url, api_key)['data']['records']
+    in_finance = set()
+    for record in finance_data:
+        in_finance.add(record['fields']['Причина расходов'].split('№')[-1])
     
     for record in data['data']['records']:
+        total = 0
         try:
-            record['fields']['Общая стоимость']
+            total = record['fields']['Общая стоимость']
         except KeyError:
             try:
                 s = parse_quantity(record['fields']['Стоимость товаров'])
                 k = parse_quantity(record['fields']['Количество'])
-                total = 0
                 if len(s) == len(k):
                     for i in range(len(s)):
                         total += int(s[i])*int(k[i])
@@ -48,6 +54,10 @@ def process_records(data, api_key, archive_url, purchase_url, delivery_url):
             on_the_way.append(record)
         elif status == "Отменён":
             cancelled.append(record)
+        elif status == "Создан":
+            if record['fields']['Номер договора'] not in in_finance and total != 0:
+                create_fields(finance_url, api_key, {"Статус": "Не обработан", "Причина расходов": f"Затраты по договору №{record['fields']['Номер договора']}","Затраты": total})
+            
 
     for record in on_the_way:
         fields =  record['fields']
@@ -71,11 +81,11 @@ def process_records(data, api_key, archive_url, purchase_url, delivery_url):
         'cancelled': len(cancelled),
     }
 
-def purchase_request(purchase_url, api_key, archive_url, delivery_url):
+def purchase_request(purchase_url, api_key, archive_url, delivery_url, finance_url):
     try:
-        data = get(purchase_url, api_key)
+        data = get_data(purchase_url, api_key)
             
-        stats = process_records(data, api_key, archive_url, purchase_url, delivery_url)
+        stats = process_records(data, api_key, archive_url, purchase_url, delivery_url, finance_url)
         
         print("\n" + "="*50)
         print("Триггер закупок")

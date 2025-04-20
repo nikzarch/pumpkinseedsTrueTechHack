@@ -1,6 +1,6 @@
 import requests
 
-def get(url, api_key):
+def get_data(url, api_key):
     try:
         headers = {'Authorization': f'Bearer {api_key}'}
         response = requests.get(url, headers=headers)
@@ -61,7 +61,6 @@ def delete_records(url, api_key, record_ids):
         headers = {'Authorization': f'Bearer {api_key}'}
         for rid in record_ids:
             url += "&recordIds="+rid
-        print(url)
         response = requests.delete(url, headers=headers)
         response.raise_for_status()
         return True
