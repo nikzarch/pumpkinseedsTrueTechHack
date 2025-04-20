@@ -26,7 +26,9 @@ public class RequestService {
                       "Сообщение": "%s",
                       "Имя покупателя": "%s",
                       "Ссылка на покупателя": "%s",
-                      "Артикул товара": "%s"
+                      "Артикул товара": ["%s"],
+                      "Статус": "Не обработан",
+                      "Источник": "VK"
                     }
                   }
                 ],
@@ -36,7 +38,7 @@ public class RequestService {
                 purchase.getMassage(),
                 purchase.getCustomerName(),
                 purchase.getCustomerLink(),
-                purchase.getSku()
+                purchase.getSkuId()
         );
 
         HttpRequest request = HttpRequest.newBuilder()
@@ -45,6 +47,27 @@ public class RequestService {
                 .header("Authorization", "Bearer " + dotenv.get("Token"))
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
+
+
+        
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return response;
+    }
+
+    public static HttpResponse<String> getSku()
+            throws IOException, InterruptedException {
+
+        HttpClient client = HttpClient.newHttpClient();
+
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://true.tabs.sale/fusion/v1/datasheets/dstR95kW46WwtnVxnw/records?viewId=viwj37ePoX8uk&fieldKey=name"))
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + dotenv.get("Token"))
+                .GET()
+                .build();
+
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
