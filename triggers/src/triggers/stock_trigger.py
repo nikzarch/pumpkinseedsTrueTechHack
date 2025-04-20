@@ -1,30 +1,21 @@
 import requests
-from util.generic_api_usage import get,update,delete_records,create_fields
+from util.generic_api_usage import get_data,update,delete_records,create_fields
 from itertools import product as pd
 
 def process_records(api_key, stocks_url, product_url, notification_url, warehouses_url):
-    stocks_data = get(stocks_url, api_key)
-    if not stocks_data:
+    stocks_data = get_data(stocks_url, api_key)
+    warehouses_data = get_data(warehouses_url, api_key)
+    products_data = get_data(product_url, api_key)
+    notifications_data = get_data(notification_url, api_key)
+    if not all([stocks_data, warehouses_data, products_data, notifications_data]):
         return False
 
-    products_data = get(product_url, api_key)
-    if not products_data:
-        return False
-    
-    warehouses_data = get(warehouses_url, api_key)
-    if not warehouses_data:
-        return False
-
-    notifications_data = get(notification_url, api_key)
-    if not notifications_data:
-        return False
-
-    existing_notifications = set()
+    existing_notifications = dict()
     for record in notifications_data['data']['records']:
         sku = record['fields']['SKU'][0] if record['fields']['SKU'] else None
         warehouse = record['fields']['Склад'][0] if record['fields']['Склад'] else None
         if sku and warehouse:
-            existing_notifications.add((warehouse, sku))
+            existing_notifications[(warehouse, sku)] = record['recordId']
 
     existing_stocks = set()
     for stock in stocks_data['data']['records']:
@@ -54,10 +45,12 @@ def process_records(api_key, stocks_url, product_url, notification_url, warehous
         if not all([sku, warehouse]):
             continue
 
+        min_stock = min_stocks.get(sku, 0)
         if (warehouse, sku) in existing_notifications:
+            if current_stock >= min_stock:
+                delete_records(notification_url, api_key, [existing_notifications[(warehouse, sku)]])
             continue
 
-        min_stock = min_stocks.get(sku, 0)
         if current_stock < min_stock:
             print(f"Нехватка товара: SKU {sku} на складе {warehouse} ({current_stock}/{min_stock})")
             create_fields(notification_url, api_key, {"SKU": [sku], "Склад": [warehouse], "Описание": "Нехватка товара"})
