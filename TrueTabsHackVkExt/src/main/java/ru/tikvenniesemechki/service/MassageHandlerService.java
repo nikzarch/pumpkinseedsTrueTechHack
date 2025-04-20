@@ -14,6 +14,7 @@ import java.net.http.HttpResponse;
 import java.util.*;
 
 import static ru.tikvenniesemechki.config.Config.*;
+import static ru.tikvenniesemechki.service.RequestService.getSku;
 
 @Slf4j
 public class MassageHandlerService {
@@ -126,8 +127,19 @@ public class MassageHandlerService {
                 purchase.setMassage(escapedJson);
                 purchase.setCustomerName(name);
                 purchase.setCustomerLink(VK_PROFILE_URL + userName);
-                purchase.setSku(sku);
 
+                JsonNode jsonNodeGoods = mapper.readTree(getSku().body());
+                jsonNodeGoods = jsonNodeGoods.get("data").get("records");
+
+                String sku_id = null;
+
+                for(JsonNode jsonNodeGood: jsonNodeGoods){
+                    if (Objects.equals(jsonNodeGood.get("fields").get("SKU (ID товара)").asText(), sku)){
+                        sku_id = jsonNodeGood.get("recordId").asText();
+                    }
+                }
+
+                purchase.setSkuId(sku_id);
 
                 HttpResponse<String> response = RequestService.setPurchase(purchase);
                 System.out.println(response.body());
