@@ -14,10 +14,11 @@ export default function Cart() {
   const sendCart = async () => {
     const records = items.map((item) => ({
       fields: {
-        Название: item.fields["Название товара"], 
-        "SKU (ID товара)": item.fields["SKU (ID товара)"], 
-        Маркетплейс: "дикая черешня",
-        Количество : item.quantity,
+        "Название": item.fields["Название товара"], 
+        "SKU (ID товара)": [item.recordId], 
+        "Площадка": "интернет магазин",
+        "Количество" : item.quantity,
+        "Статус": "Не обработан",
       },
     }));
 
@@ -25,7 +26,7 @@ export default function Cart() {
       records: records,
       fieldKey: "name",
     };
-
+    console.log("Заказ успешно отправлен:", data);
     try {
       const response = await fetch(API_POST_URL, {
         method: "POST",
