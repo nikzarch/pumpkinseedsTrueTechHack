@@ -1,11 +1,22 @@
 .app-header {
-    background-color: #064e3b;
-    color: white;
-    padding: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  .product-grid-container {
-    padding: 1rem;
-  }
-  
+  background-color: #064e3b;
+  color: white;
+  padding: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.product-grid-container {
+  padding: 1rem;
+}
+
+.feedback-button {
+  backgroundColor: '#fff';
+  color: '#064e3b';
+  padding: '6px 12px';
+  borderRadius: '6px';
+  fontWeight: 'bold';
+  textDecoration: 'none';
+  border: '2px solid #fff';
+  marginLeft: 'auto';
+}
