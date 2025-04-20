@@ -21,5 +21,9 @@ def load_config():
         'warehouses_url': config['api']['warehouses_url'],
         'inventory_url': config['api']['inventory_url'],
         'shortage_url': config['api']['shortage_url'],
+        'expense_url': config['api']['expense_url'],
+        'order_url': config['api']['order_url'],
+        'order_archive_url': config['api']['order_archive_url'],
+        'income_url': config['api']['income_url'],
         'finance_url': config['api']['finance_url']
     }

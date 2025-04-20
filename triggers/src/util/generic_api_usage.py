@@ -48,7 +48,7 @@ def create_fields(stocks_url, api_key, fields):
 
         response = requests.post(stocks_url, headers=headers, json=payload)
         response.raise_for_status()
-        return True
+        return response.json()
     except requests.exceptions.RequestException as e:
         print(f"Ошибка при создании остатка: {e}")
         return False
