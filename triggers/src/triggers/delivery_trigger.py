@@ -107,10 +107,10 @@ def process_records(data, api_key, stocks_data, stocks_url, archive_url, deliver
     
     unique_ids_to_delete = list(set(ids))
     
-    # if unique_ids_to_delete:
-    #     delete_success = delete_records(delivery_url, api_key, unique_ids_to_delete)
-    #     if delete_success:
-    #         print(f"Удалено записей из исходной таблицы: {len(unique_ids_to_delete)}")
+    if unique_ids_to_delete:
+        delete_success = delete_records(delivery_url, api_key, unique_ids_to_delete)
+        if delete_success:
+            print(f"Удалено записей из исходной таблицы: {len(unique_ids_to_delete)}")
     
     return {
         'total': len(data['data']['records']),
