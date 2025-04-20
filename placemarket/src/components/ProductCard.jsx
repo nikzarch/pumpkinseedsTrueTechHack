@@ -25,8 +25,8 @@ export default function ProductCard({ product }) {
             "Сообщение": message,
             "Имя покупателя": name,
             "Ссылка на покупателя": link,
-            "Артикул товара": fields["SKU (ID товара)"],
-            "Статус": "Не обработан",
+            "Артикул товара": [product.recordId],
+            "Статус": "Создан",
           },
         },
       ],
@@ -42,8 +42,9 @@ export default function ProductCard({ product }) {
         },
         body: JSON.stringify(data),
       });
-
+      console.log(JSON.stringify(data))
       if (response.ok) {
+        console.log(response)
         setName("");
         setLink("");
         setMessage("");
