@@ -36,7 +36,7 @@ def process_records(api_key, order_url, order_archive_url, product_url, income_u
             delete_records(order_url, api_key, [order['recordId']])
         elif status == "Создан":
             choice = random.choice(existing_stocks[fields['SKU (ID товара)'][0]])
-            s = fields['Количество']*product_prices[fields['SKU (ID товара)'][0]]
+            s = fields['Количество']
             if s > choice[1]:
                 update(order_url, api_key, order['recordId'], {"Статус": "Отменён"})
             else:

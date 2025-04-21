@@ -20,7 +20,7 @@ def process_records(api_key, stocks_url, inventory_url, shortage_url):
         sku = stock['fields']['SKU'][0] if stock['fields'].get('SKU') else None
         warehouse = stock['fields']['Склад'][0] if stock['fields'].get('Склад') else None
         if sku and warehouse:
-            existing_stocks[(warehouse, sku)] = int(stock['fields']['Остаток'])
+            existing_stocks[(warehouse, sku)] = (int(stock['fields']['Остаток']), stock['recordId'])
 
     for inventory in inventory_data['data']['records']:
         fields = inventory['fields']
@@ -30,8 +30,9 @@ def process_records(api_key, stocks_url, inventory_url, shortage_url):
         old = []
         new = []
         for i in range(len(skus)):
-            old.append(existing_stocks.get((warehouse, skus[i]), 0))
-            new.append(s[i] - existing_stocks.get((warehouse, skus[i]), 0))
+            old.append(existing_stocks.get((warehouse, skus[i]), (0,0))[0])
+            new.append(s[i] - existing_stocks.get((warehouse, skus[i]), (0,0))[0])
+            update(stocks_url, api_key, existing_stocks.get((warehouse, skus[i]), (0,0))[1], {"Отсаток": int(s[i])})
         create_fields(shortage_url, api_key, {"Склад": [warehouse],
                                             "SKU": skus,
                                             "Количество по итогу инвентаризации": ",".join(list(map(str,s))),
