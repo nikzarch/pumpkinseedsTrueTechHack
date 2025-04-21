@@ -4,6 +4,8 @@ from triggers.purchase_trigger import purchase_request
 from triggers.delivery_trigger import delivery_request
 from triggers.stock_trigger import stock_request
 from triggers.inventory_trigger import inventory_request
+from triggers.order_trigger import order_request
+from triggers.finance_trigger import finance_request
 
 def main():
     config = load_config()
@@ -17,7 +19,7 @@ def main():
                 config['api_key'],
                 config['archive_url'],
                 config['delivery_url'],
-                config['finance_url']
+                config['expense_url']
             )
             delivery_request(
                 config['api_key'],
@@ -37,6 +39,20 @@ def main():
                 config['stocks_url'],
                 config['inventory_url'],
                 config['shortage_url']
+            )
+            order_request(
+                config['api_key'],
+                config['order_url'],
+                config['order_archive_url'],
+                config['product_url'],
+                config['income_url'],
+                config['stocks_url']
+            )
+            finance_request(
+                config['api_key'],
+                config['income_url'],
+                config['expense_url'],
+                config['finance_url']
             )
             time.sleep(5)
 

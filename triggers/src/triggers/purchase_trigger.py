@@ -63,7 +63,6 @@ def process_records(data, api_key, archive_url, purchase_url, delivery_url, fina
         fields =  record['fields']
         fields.pop('Почта ответсвенного лица', None)
         fields.pop('ID закупки', None)
-        print(fields)
         create_fields(delivery_url, api_key, fields)
     
     ids = archive(archive_url, api_key, cancelled)

@@ -91,10 +91,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         contract_keyboard = []
 
         for base in context.user_data.get('bases').values():
-            contract_keyboard.append(
-                [InlineKeyboardButton(base['fields']['Номер договора'],
-                                      callback_data="contract_" + base['fields']['Номер договора'])]
-            )
+            print(base)
+            print(provider_id)
+
+            if provider_id in base['fields']['Поставщик']:
+                contract_keyboard.append(
+                    [InlineKeyboardButton(base['fields']['Номер договора'],
+                                          callback_data="contract_" + base['fields']['Номер договора'])]
+                )
 
         reply_markup = InlineKeyboardMarkup(contract_keyboard)
 
