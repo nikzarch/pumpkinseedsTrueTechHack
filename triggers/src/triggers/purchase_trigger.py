@@ -24,9 +24,8 @@ def archive(archive_url, api_key, records):
 def process_records(data, api_key, archive_url, purchase_url, delivery_url, finance_url):
     on_the_way = []
     cancelled = []
-
     finance_data = get_data(finance_url, api_key)['data']['records']
-    if not all(data, finance_data):
+    if not all([data, finance_data]):
         return False
     in_finance = set()
     for record in finance_data:

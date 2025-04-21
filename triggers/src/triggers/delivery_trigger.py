@@ -123,7 +123,7 @@ def delivery_request(api_key, archive_url, delivery_url, stocks_url):
         data = get_data(delivery_url, api_key)
         
         stocks_data = get_data(stocks_url, api_key)
-        if stocks_data is None:
+        if not all ([data, stocks_data]):
             return
             
         stats = process_records(data, api_key, stocks_data, stocks_url, archive_url, delivery_url)

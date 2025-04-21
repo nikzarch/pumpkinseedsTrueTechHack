@@ -5,43 +5,25 @@ services:
     build:
       context: ./TrueTabsHackVkExt
       dockerfile: Dockerfile
-    image: vk-script:latest
     container_name: vk-script
     restart: unless-stopped
     env_file:
       - ./TrueTabsHackVkExt/.env
     volumes:
       - ./TrueTabsHackVkExt:/app
-    networks:
-      - scripts-network
 
   telegram-bot:
     build:
       context: ./TgExt
       dockerfile: Dockerfile
-    image: telegram-bot:latest
     container_name: telegram-bot
     restart: unless-stopped
     env_file:
       - ./TgExt/.env
-    networks:
-      - scripts-network
-    depends_on:
-      - vk-script
 
   triggers:
     build:
       context: ./triggers
       dockerfile: Dockerfile
-    image: triggers:latest
     container_name: triggers
     restart: unless-stopped
-    networks:
-      - scripts-network
-    depends_on:
-      - vk-script
-      - telegram-bot
-
-networks:
-  scripts-network:
-    driver: bridge
